@@ -10,4 +10,14 @@ class CreateCustomer extends CreateRecord
 {
     protected static string $resource = CustomerResource::class;
     protected static bool $canCreateAnother = false;
+
+    protected function getRedirectUrl(): string
+    {
+        return $this->getResource()::getUrl('index');
+    }
+
+    protected function getCreatedNotificationTitle(): ?string
+    {
+        return 'Customer has been created successfully';
+    }
 }
