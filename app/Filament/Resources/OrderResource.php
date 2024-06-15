@@ -34,7 +34,12 @@ class OrderResource extends Resource
                     ->label('Customer Name')
                     ->options(Customer::all()->pluck('name', 'id'))
                     ->searchable(),
-                Select::make('status')->label('Status')->options(['Unpaid', 'Paid']),
+                Select::make('status')
+                    ->label('Status')
+                    ->options([
+                        'Unpaid' => 'Unpaid',
+                        'Paid' => 'Paid'
+                    ]),
                 Repeater::make('order_items')
                     ->relationship('orderItems')
                     ->schema([
@@ -49,7 +54,7 @@ class OrderResource extends Resource
                                     $quantity = $get('quantity') ?: 0;
                                     $set('total', $quantity * $item->sale_price);
                                 }
-                                // static::recalculateGrandTotal($set, $get);
+                                static::recalculateGrandTotal($set, $get);
                             }),
                         Forms\Components\TextInput::make('quantity')
                             ->required()
@@ -77,12 +82,12 @@ class OrderResource extends Resource
                     ->columns(3)
                     ->addActionLabel('Add Order Item')
                     ->afterStateUpdated(function (callable $set, callable $get) {
-                        // static::recalculateGrandTotal($set, $get);
+                        static::recalculateGrandTotal($set, $get);
                     }),
-                TextInput::make('grand_total')->disabled()->numeric(),
-
+                TextInput::make('grand_total')->readOnly()->numeric()->default(0),
             ]);
     }
+
 
     public static function table(Table $table): Table
     {
