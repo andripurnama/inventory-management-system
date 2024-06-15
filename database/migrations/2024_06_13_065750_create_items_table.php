@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->double('sale_price');
             $table->double('purchase_price');
-            $table->integer('stock_level');
+            $table->integer('stock');
             $table->softDeletes();
             $table->timestamps();
         });
