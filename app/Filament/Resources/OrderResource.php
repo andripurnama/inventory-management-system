@@ -26,6 +26,10 @@ class OrderResource extends Resource
     protected static ?string $navigationIcon = 'heroicon-m-shopping-cart';
 
     protected static ?string $navigationGroup = 'Transaction';
+
+    protected static ?string $navigationLabel = 'Sales Order';
+
+    protected ?bool $hasDatabaseTransactions = true;
     public static function form(Form $form): Form
     {
         return $form
@@ -40,8 +44,8 @@ class OrderResource extends Resource
                         'Unpaid' => 'Unpaid',
                         'Paid' => 'Paid'
                     ]),
-                Repeater::make('order_items')
-                    ->relationship('orderItems')
+                Repeater::make('orderItems')
+                    ->relationship()
                     ->schema([
                         Forms\Components\Select::make('item_id')
                             ->relationship('item', 'name')
@@ -70,12 +74,12 @@ class OrderResource extends Resource
                         Forms\Components\TextInput::make('price')
                             ->required()
                             ->numeric()
-                            ->disabled()
+                            ->readOnly()
                             ->step(0.01),
                         Forms\Components\TextInput::make('total')
-                            ->disabled()
+                            ->readOnly()
                             ->numeric()
-                            ->step(0.01)
+                            ->step(1)
                             ->reactive()
                     ])
                     ->columnSpanFull()
@@ -138,7 +142,7 @@ class OrderResource extends Resource
 
     protected static function recalculateGrandTotal(callable $set, callable $get)
     {
-        $orderItems = $get('order_items') ?? [];
+        $orderItems = $get('orderItems') ?? [];
         $grandTotal = array_reduce($orderItems, function ($total, $item) {
             return $total + ($item['quantity'] * $item['price']);
         }, 0);
