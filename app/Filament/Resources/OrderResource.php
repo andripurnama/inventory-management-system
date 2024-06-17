@@ -99,13 +99,18 @@ class OrderResource extends Resource
             ->columns([
                 TextColumn::make('order_reference')->searchable()->sortable(),
                 TextColumn::make('customer.name')->searchable()->sortable(),
-                TextColumn::make('status')->badge(),
+                TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
+                    'Unpaid' => 'warning',
+                    'Paid' => 'success',
+                }),
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make()
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
