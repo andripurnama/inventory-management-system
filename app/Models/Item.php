@@ -11,6 +11,7 @@ class Item extends Model
 {
     use HasFactory, SoftDeletes;
 
+    protected $fillable = ['name', 'description', 'sale_price', 'purchase_price', 'stock'];
     public function purchases(): HasMany
     {
         return $this->hasMany(PurchaseOrderDetail::class);
