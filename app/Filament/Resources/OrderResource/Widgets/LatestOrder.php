@@ -10,24 +10,29 @@ use Filament\Widgets\TableWidget as BaseWidget;
 
 class LatestOrder extends BaseWidget
 {
+    protected int | string | array $columnSpan = [
+        'md' => 12,
+        'xl' => 12,
+    ];
     public function table(Table $table): Table
     {
         return $table
             ->query(OrderResource::getEloquentQuery())
             ->defaultPaginationPageOption(5)
             ->defaultSort('created_at', 'desc')
+            ->recordTitle('Latest Sales Order')
             ->columns([
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Order Date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('number')
+                Tables\Columns\TextColumn::make('status')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('customer.name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('total_price')
+                Tables\Columns\TextColumn::make('grand_total')
                     ->searchable()
                     ->sortable(),
             ])
