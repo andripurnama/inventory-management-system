@@ -13,7 +13,6 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
-use Filament\Tables\Actions\ForceDeleteAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Icetalker\FilamentTableRepeater\Forms\Components\TableRepeater;
@@ -97,15 +96,20 @@ class PurchaseResource extends Resource
                 TextColumn::make('purchase_reference')->sortable()->searchable(),
                 TextColumn::make('supplier.name')->sortable()->searchable(),
                 TextColumn::make('grand_total')->sortable()->searchable(),
-                TextColumn::make('status')->sortable()->searchable(),
+                TextColumn::make('status')->badge()->color(fn (string $state): string => match ($state) {
+                    'Unpaid' => 'warning',
+                    'Paid' => 'success',
+                })->sortable()->searchable(),
                 TextColumn::make('remarks')->sortable()->searchable(),
+                TextColumn::make('action')
             ])
             ->filters([
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
-                ForceDeleteAction::make()
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
