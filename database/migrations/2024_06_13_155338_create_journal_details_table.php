@@ -17,11 +17,11 @@ return new class extends Migration
             $table->foreign('journal_id')->references('id')->on('journals')->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('account_id');
             $table->foreign('account_id')->references('id')->on('accounts')->onUpdate('cascade')->onDelete('cascade');
-            $table->string('reference');
+            $table->string('reference')->nullable();
             $table->string('reference_type')->nullable();
             $table->double('debit')->default(0);
             $table->double('credit')->default(0);
-            $table->text('remarks');
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }
