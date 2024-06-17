@@ -21,7 +21,7 @@ class Journal extends Model
     {
         parent::boot();
         self::creating(function ($model) {
-            $model->reference = UniqueIdGenerator::generate(['table' => $model->getTable(), 'length' => 10, 'prefix' => 'GR-', 'suffix' => date('-dmyhis'), 'field' => 'order_reference']);
+            $model->reference = UniqueIdGenerator::generate(['table' => $model->getTable(), 'length' => 10, 'prefix' => 'GR-', 'suffix' => date('-dmyhis'), 'field' => 'reference']);
         });
     }
 }
